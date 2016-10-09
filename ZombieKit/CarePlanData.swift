@@ -72,10 +72,10 @@ class CarePlanData: NSObject {
       identifier: ActivityIdentifier.limberUp.rawValue,
       groupIdentifier: nil,
       type: .intervention,
-      title: "NZT-148",
+      title: "Ativan",
       text: "Intake",
       tintColor: UIColor.darkOrange(),
-      instructions: "This is your depression medicine.",
+      instructions: "This is your anxiety medicine.",
       imageURL: nil,
       schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 2),
       resultResettable: true,
@@ -114,12 +114,24 @@ class CarePlanData: NSObject {
                   resultResettable: true,
                   schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
                   userInfo: ["ORKTask": AssessmentTaskFactory.makeTemperatureAssessmentTask()])
+    
+    let moodActivity = OCKCarePlanActivity
+        .assessment(withIdentifier: ActivityIdentifier.mood.rawValue,
+                    groupIdentifier: nil,
+                    title: "Daily Emotional Survey",
+                    text: "How are you feeling?",
+                    tintColor: nil,
+                    resultResettable: false,
+                    schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
+                    userInfo: ["ORKTask": AssessmentTaskFactory.makeTemperatureAssessmentTask()])
+    
+    
 
     
     super.init()
     
     for activity in [cardioActivity, limberUpActivity, targetPracticeActivity,
-                     pulseActivity, temperatureActivity] {
+                     pulseActivity, temperatureActivity, moodActivity] {
                       add(activity: activity)
     }
   }
