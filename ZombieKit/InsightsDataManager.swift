@@ -28,6 +28,8 @@ class InsightsDataManager {
   let gatherDataGroup = DispatchGroup()
   var pulseData = [DateComponents: Double]()
   var temperatureData = [DateComponents: Double]()
+    var biotinData = [DateComponents: Double]()
+    var moodData = [DateComponents: Double]()
 
   var completionSeries: OCKBarSeries {
     let completionValues = completionData.map({ NSNumber(value:$0.value) })
@@ -36,7 +38,7 @@ class InsightsDataManager {
       .map({ NumberFormatter.localizedString(from: $0, number: .percent)})
     
     return OCKBarSeries(
-      title: "Drug Intake and Wellness",
+      title: "Wellness Analysis",
       values: completionValues,
       valueLabels: completionValueLabels,
       tintColor: UIColor.darkOrange())
@@ -77,6 +79,25 @@ class InsightsDataManager {
                                    endDate: endDateComponents) { (fetchedData) in
                                     self.temperatureData = fetchedData
       }
+        
+        
+        guard let biotinActivity = self.findActivityWith(ActivityIdentifier.biotin) else { return }
+        self.fetchActivityResultsFor(biotinActivity, startDate: startDateComponents,
+                                     endDate: endDateComponents) { (fetchedData) in
+                                        self.biotinData = fetchedData
+        }
+        
+        guard let moodActivity = self.findActivityWith(ActivityIdentifier.mood) else { return }
+        self.fetchActivityResultsFor(moodActivity, startDate: startDateComponents,
+                                     endDate: endDateComponents) { (fetchedData) in
+                                        self.biotinData = fetchedData
+        }
+        
+        
+        
+        
+        
+        
 
       self.fetchDailyCompletion(startDate: startDateComponents, endDate: endDateComponents)
       
@@ -118,15 +139,18 @@ class InsightsDataManager {
                                              tintColor: UIColor.darkGreen())
     let temperatureAssessmentSeries = barSeriesFor(data: temperatureData, title: "Temperature",
                                                    tintColor: UIColor.darkYellow())
+    let biotinAssessmentSeries = barSeriesFor(data:biotinData, title: "Biotin", tintColor: UIColor.darkOrange())
+    
+    let moodAssessmentSeries = barSeriesFor(data:biotinData, title: "Mood", tintColor: UIColor.purple)
     
     // Create chart from completion and assessment series
     let chart = OCKBarChart(
       title: "Insights",
-      text: "Drug Intake and Wellness",
+      text: "Wellness",
       tintColor: UIColor.green,
       axisTitles: dateStrings,
       axisSubtitles: nil,
-      dataSeries: [completionSeries, temperatureAssessmentSeries, pulseAssessmentSeries])
+      dataSeries: [completionSeries, temperatureAssessmentSeries, pulseAssessmentSeries, biotinAssessmentSeries, moodAssessmentSeries])
     
     return [chart]
   }

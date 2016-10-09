@@ -146,13 +146,21 @@ extension TabBarViewController: CarePlanStoreManagerDelegate {
 
 // MARK: - OCKConnectViewControllerDelegate
 extension TabBarViewController: OCKConnectViewControllerDelegate {
+    
+    //here
   func connectViewController(_ connectViewController: OCKConnectViewController,
                              didSelectShareButtonFor contact: OCKContact,
                              presentationSourceView sourceView: UIView) {
+    
+    
+    
     let document = carePlanData.generateDocumentWith(chart: insightChart)
     let activityViewController = UIActivityViewController(activityItems: [document.htmlContent],
                                                           applicationActivities: nil)
     
     present(activityViewController, animated: true, completion: nil)
+    
+    
+    
   }
 }

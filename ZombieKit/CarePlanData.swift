@@ -28,6 +28,7 @@ enum ActivityIdentifier: String {
   case targetPractice = "Target Practice"
   case pulse
   case temperature
+  case biotin
   case mood
     
 }
@@ -38,7 +39,7 @@ class CarePlanData: NSObject {
   let contacts =
     [
      OCKContact(contactType: .careTeam,
-                name: "Dr. Shivam Patel",
+                name: "Dr. Martin H. Coger",
                 relation: "Psychatrist",
                 tintColor: nil,
                 phoneNumber: CNPhoneNumber(stringValue: "510-555-5555"),
@@ -98,7 +99,7 @@ class CarePlanData: NSObject {
       .assessment(withIdentifier: ActivityIdentifier.pulse.rawValue,
                   groupIdentifier: nil,
                   title: "Pulse",
-                  text: "Do you have one?",
+                  text: "Measure your pulse.",
                   tintColor: UIColor.darkGreen(),
                   resultResettable: true,
                   schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
@@ -115,15 +116,27 @@ class CarePlanData: NSObject {
                   schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
                   userInfo: ["ORKTask": AssessmentTaskFactory.makeTemperatureAssessmentTask()])
     
+    
+    let biotinActivity = OCKCarePlanActivity
+        .assessment(withIdentifier: ActivityIdentifier.biotin.rawValue,
+                    groupIdentifier: nil,
+                    title: "Biotin",
+                    text: "Biotin Count",
+                    tintColor: UIColor.darkYellow(),
+                    resultResettable: true,
+                    schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
+                    userInfo: ["ORKTask": AssessmentTaskFactory.makeBiotinAssessmentTask()])
+    
     let moodActivity = OCKCarePlanActivity
         .assessment(withIdentifier: ActivityIdentifier.mood.rawValue,
                     groupIdentifier: nil,
                     title: "Daily Emotional Survey",
                     text: "How are you feeling?",
                     tintColor: nil,
-                    resultResettable: false,
+                    resultResettable: true,
                     schedule: CarePlanData.dailyScheduleRepeating(occurencesPerDay: 1),
-                    userInfo: ["ORKTask": AssessmentTaskFactory.makeTemperatureAssessmentTask()])
+                    userInfo: ["ORKTask": AssessmentTaskFactory.makeMoodAssessmentTask()]
+            )
     
     
 
@@ -131,7 +144,7 @@ class CarePlanData: NSObject {
     super.init()
     
     for activity in [cardioActivity, limberUpActivity, targetPracticeActivity,
-                     pulseActivity, temperatureActivity, moodActivity] {
+                     pulseActivity, temperatureActivity, biotinActivity, moodActivity] {
                       add(activity: activity)
     }
   }
@@ -151,15 +164,17 @@ class CarePlanData: NSObject {
 
 extension CarePlanData {
   func generateDocumentWith(chart: OCKChart?) -> OCKDocument {
-    let intro = OCKDocumentElementParagraph(content: "I've been tracking my efforts to avoid becoming a Zombie with ZombieKit. Please check the attached report to see if you're safe around me.")
+    let intro = OCKDocumentElementParagraph(content: "I've been tracking my efforts to improve my mental health.")
+    
+    //Firebase stuff here. 
     
     var documentElements: [OCKDocumentElement] = [intro]
     if let chart = chart {
       documentElements.append(OCKDocumentElementChart(chart: chart))
     }
     
-    let document = OCKDocument(title: "Re: Your Brains", elements: documentElements)
-    document.pageHeader = "ZombieKit: Weekly Report"
+    let document = OCKDocument(title: "Re: Your Mental Health", elements: documentElements)
+    document.pageHeader = "Mental Health Report"
     
     return document
   }

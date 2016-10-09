@@ -130,7 +130,7 @@
 		128434631CDFA28A00979CD4 = {
 			isa = PBXGroup;
 			children = (
-				1284346E1CDFA28A00979CD4 /* ZombieKit */,
+				1284346E1CDFA28A00979CD4 /* HealthKit */,
 				1284346D1CDFA28A00979CD4 /* Products */,
 				1273FB581D98390C0007B4C2 /* Frameworks */,
 			);
@@ -144,7 +144,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1284346E1CDFA28A00979CD4 /* ZombieKit */ = {
+		1284346E1CDFA28A00979CD4 /* HealthKit */ = {
 			isa = PBXGroup;
 			children = (
 				129891191D96F99900075E9C /* ZombieKit.entitlements */,
@@ -156,6 +156,7 @@
 				12F3B8571CED5C7F00B160C2 /* Utilities */,
 				12F3B8601CEF856A00B160C2 /* Supporting Files */,
 			);
+			name = HealthKit;
 			path = ZombieKit;
 			sourceTree = "<group>";
 		};
